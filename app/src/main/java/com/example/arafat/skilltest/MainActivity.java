@@ -1,6 +1,7 @@
 package com.example.arafat.skilltest;
 
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +12,8 @@ import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends ListActivity implements Utility.OnTaskCompleted {
+public class MainActivity extends ListActivity implements MyInterface.OnTaskCompleted,MyInterface.OnRetry {
+    ProgressDialog progressBar;
     public ArrayList<HashMap<String,String>> list = new ArrayList<HashMap<String,String>>();
     SimpleAdapter adapter;
     @Override
@@ -19,10 +21,19 @@ public class MainActivity extends ListActivity implements Utility.OnTaskComplete
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         adapter = new SimpleAdapter(this, list, R.layout.custom_row_view, new String[]{"category"}, new int[]{R.id.text1});
-        new ApiHelper(this,this,list).execute("getCategory");
+        requestToApi();
 
     }
-
+    private void requestToApi(){
+        if (Utility.isConnectingToInternet(this)){
+            progressBar=Utility.getProgressBar(this);
+            progressBar.show();
+            new ApiHelper(this,this,list).execute("getCategory");
+        }
+        else {
+            Utility.popUpWindow(this,this,"Check your internet");
+        }
+    }
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         try {
@@ -36,15 +47,23 @@ public class MainActivity extends ListActivity implements Utility.OnTaskComplete
     }
 
     @Override
-    public void onTaskCompleted(boolean isSuccess) {
-        if (isSuccess){
+    public void onTaskCompleted(Utility.Error isSuccess) {
+        if (isSuccess==Utility.Error.success){
             setListAdapter(adapter);
 
-        }else{
-            // TODO: 03/03/2017   check network error msg
-
+        }else if(isSuccess== Utility.Error.noData){
+            Utility.popUpWindow(this,this,"No category available");
+        }else {
+            Utility.popUpWindow(this,this,"Check your internet");
         }
+        progressBar.cancel();
+        progressBar.dismiss();
 
+    }
+
+    @Override
+    public void onRetry() {
+        requestToApi();
     }
    /* public void login(View view){
         String username = usernameField.getText().toString();

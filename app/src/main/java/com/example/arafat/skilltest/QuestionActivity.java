@@ -1,5 +1,6 @@
 package com.example.arafat.skilltest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -10,24 +11,25 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class QuestionActivity extends AppCompatActivity implements Utility.OnTaskCompleted{
-    private int categoryId,currentPosition,questionSize;
+public class QuestionActivity extends AppCompatActivity implements MyInterface.OnTaskCompleted,MyInterface.OnRetry{
+    private int categoryId,currentPosition,questionSize,totalAnsweredQuestion;
     private TextView questionTextView,correctAnsTextView;
     private RadioButton optionARadioButton,optionBRadioButton,optionCRadioButton,optionDRadioButton;
     private Button checkButton, nextButton,prvButton;
     private LinearLayout checkLayout,nextLayout;
     private RadioGroup radioGroup;
+    private ProgressDialog progressDialog;
     public ArrayList<HashMap<String,String> > list = new ArrayList<HashMap<String,String>>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
         Init();
+        requestToApi();
     }
 
     private void Init() {
@@ -47,17 +49,28 @@ public class QuestionActivity extends AppCompatActivity implements Utility.OnTas
         nextLayout = (LinearLayout) findViewById(R.id.nextLayout);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
 
-
-        new ApiHelper(this, this,list).execute("getQuestion",String.valueOf(categoryId));
+        questionTextView.setText("");
+        setControlVisibility(false);
 
     }
 
+    private void requestToApi() {
+        if (Utility.isConnectingToInternet(this)){
+            progressDialog = Utility.getProgressBar(this);
+            progressDialog.show();
+            new ApiHelper(this, this,list).execute("getQuestion",String.valueOf(categoryId));
+        }
+        else {
+            Utility.popUpWindow(this,this,"Check your internet");
+        }
+    }
+
     @Override
-    public void onTaskCompleted(boolean isSuccess) {
-        if (isSuccess){
+    public void onTaskCompleted(Utility.Error isSuccess) {
+        if (isSuccess== Utility.Error.success){
             questionSize=list.size();
             if(questionSize>0){
-                setControlVisivility(true);
+                setControlVisibility(true);
                 list = Utility.getRandomizationList(list);
                 setQuestion(0);
                 if (currentPosition>=questionSize-1){
@@ -68,17 +81,22 @@ public class QuestionActivity extends AppCompatActivity implements Utility.OnTas
                 }
 
             }else {
-                setControlVisivility(false);
-                questionTextView.setText("No Question Available at this Moment");
+                setControlVisibility(false);
+                Utility.popUpWindow(this,this,"No question available");
             }
 
 
-        }else{
-            // TODO: 03/03/2017   check network error msg
-
+        }else if(isSuccess== Utility.Error.noData){
+            setControlVisibility(false);
+            Utility.popUpWindow(this,this,"No question available");
+        }else {
+            setControlVisibility(false);
+            Utility.popUpWindow(this,this,"Check your internet");
         }
+        progressDialog.cancel();
+        progressDialog.dismiss();
     }
-    public void setControlVisivility(boolean b){
+    public void setControlVisibility(boolean b){
         if (b){
             nextLayout.setVisibility(View.VISIBLE);
             checkLayout.setVisibility(View.VISIBLE);
@@ -94,7 +112,7 @@ public class QuestionActivity extends AppCompatActivity implements Utility.OnTas
 
     private void setQuestion(int questionNo){
         correctAnsTextView.setText("");
-        questionTextView.setText(String.valueOf(list.get(questionNo).get("question")));
+        questionTextView.setText(String.valueOf(questionNo+1)+". "+String.valueOf(list.get(questionNo).get("question")));
         optionARadioButton.setText("A. "+String.valueOf(list.get(questionNo).get("optionA")));
         optionBRadioButton.setText("B. "+String.valueOf(list.get(questionNo).get("optionB")));
         optionCRadioButton.setText("C. "+String.valueOf(list.get(questionNo).get("optionC")));
@@ -148,6 +166,10 @@ public class QuestionActivity extends AppCompatActivity implements Utility.OnTas
     }
 
     public void checkButtonOnClick(View view){
+        totalAnsweredQuestion++;
+        if (totalAnsweredQuestion==Utility.questionToBeAnswered){
+            Utility.popUpWindow(this,this,"Your total correct answer is "+Utility.getTotalCorrectAnswer(list,questionSize));
+        }
         int radioButtonID = radioGroup.getCheckedRadioButtonId();
         if(radioButtonID!=-1){
             RadioButton radioButton = (RadioButton) radioGroup.findViewById(radioButtonID);
@@ -167,5 +189,10 @@ public class QuestionActivity extends AppCompatActivity implements Utility.OnTas
             correctAnsTextView.setText("Select one option first");
         }
 
+    }
+
+    @Override
+    public void onRetry() {
+        requestToApi();
     }
 }
