@@ -1,5 +1,6 @@
 package com.example.arafat.skilltest;
 
+import android.app.Application;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -65,13 +66,9 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
     public void onRetry() {
         requestToApi();
     }
-   /* public void login(View view){
-        String username = usernameField.getText().toString();
-        String password = passwordField.getText().toString();
-        method.setText("Get Method");
-        new SigninActivity(this,status,role,0).execute(username,password);
-
-    }*/
-
+    @Override
+    public void onBackPressed() {
+        System.exit(0);
+    }
 
 }

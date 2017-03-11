@@ -4,8 +4,11 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -213,11 +216,11 @@ public class Utility {
         text.setText(msg);
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+
         // if button is clicked, close the custom dialog
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-
                 createRetryButton(context,listener);
             }
         });
@@ -236,6 +239,25 @@ public class Utility {
         final Dialog dialog = new Dialog(context,R.style.retryButtonTheme);
         dialog.setContentView(R.layout.retry_button);
         Button retryButton = (Button) dialog.findViewById(R.id.retryButton);
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_BACK){
+                    if(context.toString().contains(MainActivity.class.getSimpleName())){
+                        System.exit(0);
+                    }else if (context.toString().contains(QuestionActivity.class.getSimpleName()))
+                        try {
+                            Intent intentMain = new Intent(context, MainActivity.class);
+
+                            context.startActivity(intentMain);
+                        } catch (Exception e) {
+                            Log.d("ListItem",e.getMessage());
+                        }
+                    System.exit(0);
+                }
+                return false;
+            }
+        });
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
