@@ -46,10 +46,10 @@ public class ApiHelper extends AsyncTask {
     @Override
     protected void onPostExecute(Object result){
         if (result.toString().contains("Exception")) {
-            listener.onTaskCompleted(Utility.Error.noInternet);
+            listener.onTaskCompleted(Utility.Status.noInternet);
         }
         else if(result.toString().equals("")){
-            listener.onTaskCompleted(Utility.Error.noData);
+            listener.onTaskCompleted(Utility.Status.noData);
         }
         else {
             switch (method){
@@ -60,7 +60,7 @@ public class ApiHelper extends AsyncTask {
                     Utility.populateQuestion(result,list);
                     break;
             }
-            listener.onTaskCompleted(Utility.Error.success);
+            listener.onTaskCompleted(Utility.Status.success);
         }
     }
 

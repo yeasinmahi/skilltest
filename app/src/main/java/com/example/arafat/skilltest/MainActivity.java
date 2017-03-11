@@ -1,6 +1,5 @@
 package com.example.arafat.skilltest;
 
-import android.app.Application;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -24,6 +23,7 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
         adapter = new SimpleAdapter(this, list, R.layout.custom_row_view, new String[]{"category"}, new int[]{R.id.text1});
         requestToApi();
 
+
     }
     private void requestToApi(){
         if (Utility.isConnectingToInternet(this)){
@@ -32,11 +32,12 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
             new ApiHelper(this,this,list).execute("getCategory");
         }
         else {
-            Utility.popUpWindow(this,this,"Check your internet");
+            Utility.popUpWindow(this,this,"Check your internet",true);
         }
     }
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        l.setItemsCanFocus(false);
         try {
             Intent intentMain = new Intent(MainActivity.this, QuestionActivity.class);
             int categoryId=Integer.parseInt(list.get(position).get("id"));
@@ -48,14 +49,14 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
     }
 
     @Override
-    public void onTaskCompleted(Utility.Error isSuccess) {
-        if (isSuccess==Utility.Error.success){
+    public void onTaskCompleted(Utility.Status isSuccess) {
+        if (isSuccess== Utility.Status.success){
             setListAdapter(adapter);
 
-        }else if(isSuccess== Utility.Error.noData){
-            Utility.popUpWindow(this,this,"No category available");
+        }else if(isSuccess== Utility.Status.noData){
+            Utility.popUpWindow(this,this,"No category available",true);
         }else {
-            Utility.popUpWindow(this,this,"Check your internet");
+            Utility.popUpWindow(this,this,"Check your internet",true);
         }
         progressBar.cancel();
         progressBar.dismiss();

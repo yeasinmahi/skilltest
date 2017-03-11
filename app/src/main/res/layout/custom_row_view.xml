@@ -8,7 +8,7 @@
 <Button android:id="@+id/text1"
   	android:textSize="20sp"
   	android:textStyle="bold" 
-  	android:textColor="#2e2c2f"
+  	android:textColor="#fff"
 	android:background="@drawable/button"
 	android:layout_margin="10dp"
 	android:layout_gravity="center_vertical"
@@ -16,5 +16,5 @@
 	android:clickable="false"
 	android:focusable="false"
   	android:layout_width="match_parent"
-  	android:layout_height="match_parent"/>
+  	android:layout_height="wrap_content"/>
 </LinearLayout>

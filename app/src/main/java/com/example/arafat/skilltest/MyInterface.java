@@ -6,7 +6,7 @@ package com.example.arafat.skilltest;
 
 public interface MyInterface {
     public interface OnTaskCompleted{
-        void onTaskCompleted(Utility.Error isSuccess);
+        void onTaskCompleted(Utility.Status isSuccess);
 
     }
     public interface OnRetry{

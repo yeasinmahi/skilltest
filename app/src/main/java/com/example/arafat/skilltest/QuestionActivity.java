@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class QuestionActivity extends AppCompatActivity implements MyInterface.OnTaskCompleted,MyInterface.OnRetry{
     private int categoryId,currentPosition,questionSize,totalAnsweredQuestion;
-    private TextView questionTextView,correctAnsTextView;
+    private TextView questionTextView,correctAnsTextView,headingQuestionStatus;
     private RadioButton optionARadioButton,optionBRadioButton,optionCRadioButton,optionDRadioButton;
     private Button checkButton, nextButton,prvButton;
     private LinearLayout checkLayout,nextLayout;
@@ -29,7 +29,8 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
         Init();
-        requestToApi();
+        InitConfig();
+
     }
 
     private void Init() {
@@ -38,6 +39,7 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
 
         questionTextView= (TextView) findViewById(R.id.questionTextView);
         correctAnsTextView= (TextView) findViewById(R.id.correctAnsTextView);
+        headingQuestionStatus= (TextView) findViewById(R.id.headingQuestionStatus);
         optionARadioButton = (RadioButton) findViewById(R.id.optionARadioButton);
         optionBRadioButton = (RadioButton) findViewById(R.id.optionBRadioButton);
         optionCRadioButton = (RadioButton) findViewById(R.id.optionCRadioButton);
@@ -49,7 +51,9 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
         nextLayout = (LinearLayout) findViewById(R.id.nextLayout);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
 
-        questionTextView.setText("");
+    }
+    public void InitConfig(){
+        requestToApi();
         setControlVisibility(false);
 
     }
@@ -61,17 +65,19 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
             new ApiHelper(this, this,list).execute("getQuestion",String.valueOf(categoryId));
         }
         else {
-            Utility.popUpWindow(this,this,"Check your internet");
+            Utility.popUpWindow(this,this,"Check your internet",true);
         }
     }
 
     @Override
-    public void onTaskCompleted(Utility.Error isSuccess) {
-        if (isSuccess== Utility.Error.success){
+    public void onTaskCompleted(Utility.Status isSuccess) {
+        if (isSuccess== Utility.Status.success){
             questionSize=list.size();
             if(questionSize>0){
                 setControlVisibility(true);
                 list = Utility.getRandomizationList(list);
+                questionSize = Utility.setQuestionSize(questionSize);
+                headingQuestionStatus.setText(String.valueOf(totalAnsweredQuestion)+"/"+ String.valueOf(questionSize));
                 setQuestion(0);
                 if (currentPosition>=questionSize-1){
                     nextButton.setVisibility(View.INVISIBLE);
@@ -82,16 +88,16 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
 
             }else {
                 setControlVisibility(false);
-                Utility.popUpWindow(this,this,"No question available");
+                Utility.popUpWindow(this,this,"No question available",true);
             }
 
 
-        }else if(isSuccess== Utility.Error.noData){
+        }else if(isSuccess== Utility.Status.noData){
             setControlVisibility(false);
-            Utility.popUpWindow(this,this,"No question available");
+            Utility.popUpWindow(this,this,"No question available",true);
         }else {
             setControlVisibility(false);
-            Utility.popUpWindow(this,this,"Check your internet");
+            Utility.popUpWindow(this,this,"Check your internet",true);
         }
         progressDialog.cancel();
         progressDialog.dismiss();
@@ -102,11 +108,13 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
             checkLayout.setVisibility(View.VISIBLE);
             radioGroup.setVisibility(View.VISIBLE);
             correctAnsTextView.setVisibility(View.VISIBLE);
+            questionTextView.setVisibility(View.VISIBLE);
         }else {
             nextLayout.setVisibility(View.GONE);
             checkLayout.setVisibility(View.GONE);
             radioGroup.setVisibility(View.GONE);
             correctAnsTextView.setVisibility(View.GONE);
+            questionTextView.setVisibility(View.GONE);
         }
     }
 
@@ -124,7 +132,7 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
         radioGroup.clearCheck();
         nextButton.setVisibility(View.VISIBLE);
         prvButton.setVisibility(View.VISIBLE);
-        questionSize = Utility.setQuestionSize(questionSize);
+
         if (view.getId()==R.id.nextButton){
             currentPosition++;
             if (currentPosition>=questionSize-1){
@@ -166,18 +174,16 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
     }
 
     public void checkButtonOnClick(View view){
-        totalAnsweredQuestion++;
-        if (totalAnsweredQuestion==Utility.questionToBeAnswered){
-            Utility.popUpWindow(this,this,"Your total correct answer is "+Utility.getTotalCorrectAnswer(list,questionSize));
-        }
+
         int radioButtonID = radioGroup.getCheckedRadioButtonId();
         if(radioButtonID!=-1){
+            totalAnsweredQuestion++;
             RadioButton radioButton = (RadioButton) radioGroup.findViewById(radioButtonID);
             String text= radioButton.getText().toString();
             String correctAns=Utility.getCorrectAnswered(list,currentPosition);
             if (text.startsWith(correctAns)){
                 Utility.setQuestionProperty(list,currentPosition,"1","1");
-                correctAnsTextView.setTextColor(Color.parseColor("#00ff00"));
+                correctAnsTextView.setTextColor(Color.parseColor("#0d7700"));
             }else {
                 Utility.setQuestionProperty(list,currentPosition,"1","0");
                 correctAnsTextView.setTextColor(Color.parseColor("#ff0000"));
@@ -187,6 +193,11 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
         }else {
             correctAnsTextView.setTextColor(Color.parseColor("#ff0000"));
             correctAnsTextView.setText("Select one option first");
+        }
+
+        headingQuestionStatus.setText(String.valueOf(totalAnsweredQuestion)+"/"+ String.valueOf(questionSize));
+        if (totalAnsweredQuestion==Utility.questionToBeAnswered){
+            Utility.popUpWindow(this,this,"Your total correct answer is "+Utility.getTotalCorrectAnswer(list,questionSize),false);
         }
 
     }

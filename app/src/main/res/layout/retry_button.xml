@@ -5,11 +5,12 @@
   android:layout_height="fill_parent">
   
 <Button android:id="@+id/retryButton"
-	android:background="@android:drawable/ic_menu_rotate"
+	android:background="@mipmap/retry_button"
 	android:layout_centerInParent="true"
 	android:focusableInTouchMode="false"
 	android:clickable="false"
 	android:focusable="false"
-  	android:layout_width="wrap_content"
-  	android:layout_height="wrap_content"/>
+  	android:layout_width="100dp"
+	android:layout_height="100dp"
+	android:elevation="0dp" />
 </RelativeLayout>

@@ -1,10 +1,13 @@
 package com.example.arafat.skilltest;
 
+import android.app.Activity;
+import android.app.Application;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -52,8 +55,8 @@ public class Utility {
     public static String getResponseFromUrl(String link){
         try{
             HttpParams httpParameters = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(httpParameters, 3000);
-            HttpConnectionParams.setSoTimeout(httpParameters, 5000);
+            HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
+            HttpConnectionParams.setSoTimeout(httpParameters, 12000);
 
             HttpClient client = new DefaultHttpClient(httpParameters);
             HttpGet request = new HttpGet();
@@ -179,7 +182,7 @@ public class Utility {
     public static String getCorrectAnswered(ArrayList<HashMap<String, String>> list,int currentPosition){
         return list.get(currentPosition).get("correctAns");
     }
-    enum Error{
+    enum Status {
         success,
         noInternet,
         noData
@@ -207,7 +210,7 @@ public class Utility {
         }
         return false;
     }
-    public static void popUpWindow(final Context context, final MyInterface.OnRetry listener  , String msg) {
+    public static void popUpWindow(final Context context, final MyInterface.OnRetry listener  , String msg, boolean isExceptionDialog) {
         // custom dialog
         final Dialog dialog = new Dialog(context,R.style.MyTheme);
         dialog.setContentView(R.layout.custom_dialog);
@@ -216,14 +219,15 @@ public class Utility {
         text.setText(msg);
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        if (isExceptionDialog){
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    createRetryButton(context,listener);
+                }
+            });
+        }
 
-        // if button is clicked, close the custom dialog
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                createRetryButton(context,listener);
-            }
-        });
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -244,11 +248,11 @@ public class Utility {
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                 if(keyCode == KeyEvent.KEYCODE_BACK){
                     if(context.toString().contains(MainActivity.class.getSimpleName())){
+                        ((Activity) context).finish();
                         System.exit(0);
                     }else if (context.toString().contains(QuestionActivity.class.getSimpleName()))
                         try {
                             Intent intentMain = new Intent(context, MainActivity.class);
-
                             context.startActivity(intentMain);
                         } catch (Exception e) {
                             Log.d("ListItem",e.getMessage());
