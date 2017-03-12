@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,7 +21,8 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
     private TextView questionTextView,correctAnsTextView,headingQuestionStatus;
     private RadioButton optionARadioButton,optionBRadioButton,optionCRadioButton,optionDRadioButton;
     private Button checkButton, nextButton,prvButton;
-    private LinearLayout checkLayout,nextLayout;
+    private LinearLayout checkLayout;
+    private RelativeLayout nextLayout;
     private RadioGroup radioGroup;
     private ProgressDialog progressDialog;
     public ArrayList<HashMap<String,String> > list = new ArrayList<HashMap<String,String>>();
@@ -48,7 +50,7 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
         nextButton = (Button) findViewById(R.id.nextButton);
         prvButton = (Button) findViewById(R.id.prvButton);
         checkLayout = (LinearLayout) findViewById(R.id.checkLayout);
-        nextLayout = (LinearLayout) findViewById(R.id.nextLayout);
+        nextLayout = (RelativeLayout) findViewById(R.id.nextLayout);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
 
     }

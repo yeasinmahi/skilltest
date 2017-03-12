@@ -6,65 +6,76 @@
     android:layout_height="match_parent"
     android:background="#bbb"
     android:orientation="vertical"
+
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.arafat.skilltest.QuestionActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/nextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/prvButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@mipmap/prev_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/button_circle"
+            android:textColor="#fff"
+            android:textSize="25dp"
+            android:text="@string/prev_button"
             android:onClick="navigationButtonOnClick" />
 
         <TextView
             android:id="@+id/headingQuestionStatus"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:textColor="#aa1414"
             android:textSize="20dp" />
 
         <Button
             android:id="@+id/nextButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@mipmap/next_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:textSize="25dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_circle"
+            android:textColor="#fff"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/next_button"
             android:onClick="navigationButtonOnClick" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_height="0dp"
+        android:layout_weight="3"
         android:orientation="horizontal">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fillViewport="true"
             android:fadeScrollbars="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
                 android:background="#eee"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/questionTextView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="Sample Question?"
                     android:textColor="#00235b"
@@ -105,7 +116,7 @@
                 <TextView
                     android:id="@+id/correctAnsTextView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="1dp"
                     android:text="Correct Answer"
                     android:textSize="18dp"
@@ -115,27 +126,22 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/checkLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/checkLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
 
             <Button
                 android:id="@+id/checkButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:background="@drawable/button"
+                android:background="@drawable/button_rectangale"
                 android:onClick="checkButtonOnClick"
                 android:text="Answer"
+                android:textSize="20dp"
                 android:textColor="#fff" />
-        </LinearLayout>
     </LinearLayout>
 
 

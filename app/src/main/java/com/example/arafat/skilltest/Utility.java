@@ -268,7 +268,7 @@ public class Utility {
                 listener.onRetry();
             }
         });
-        // if button is clicked, close the custom dialog
+        // if button_rectangale is clicked, close the custom dialog
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
