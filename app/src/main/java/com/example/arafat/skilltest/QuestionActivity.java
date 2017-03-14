@@ -198,8 +198,8 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
         }
 
         headingQuestionStatus.setText(String.valueOf(totalAnsweredQuestion)+"/"+ String.valueOf(questionSize));
-        if (totalAnsweredQuestion==Utility.questionToBeAnswered){
-            Utility.popUpWindow(this,this,"Your total correct answer is "+Utility.getTotalCorrectAnswer(list,questionSize),false);
+        if (totalAnsweredQuestion==questionSize){
+            Utility.popUpWindow(this,this,"Your total correct answer is\n"+Utility.getTotalCorrectAnswer(list,questionSize)+" out of "+questionSize,false);
         }
 
     }
