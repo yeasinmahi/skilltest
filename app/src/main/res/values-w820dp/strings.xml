@@ -2,4 +2,5 @@
 <resources>
     <string name="prev_button"><![CDATA[>]]></string>
     <string name="next_button"><![CDATA[>]]></string>
+    <string name="_data_data_">/data/data/</string>
 </resources>

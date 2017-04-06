@@ -1,4 +1,6 @@
-package com.gits.arafat.skilltest;
+package com.gits.arafat.skilltest.Others;
+
+import com.gits.arafat.skilltest.Others.Utility;
 
 /**
  * Created by Arafat on 11/03/2017.

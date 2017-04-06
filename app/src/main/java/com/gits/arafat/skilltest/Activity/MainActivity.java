@@ -1,4 +1,4 @@
-package com.gits.arafat.skilltest;
+package com.gits.arafat.skilltest.Activity;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -8,6 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
+import com.gits.arafat.skilltest.Api.ApiHelper;
+import com.gits.arafat.skilltest.Database.PopulatedOpenHelper;
+import com.gits.arafat.skilltest.Others.MyInterface;
+import com.gits.arafat.skilltest.Others.Utility;
+import com.gits.arafat.skilltest.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +27,7 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PopulatedOpenHelper.getInstance(getApplicationContext());
         adapter = new SimpleAdapter(this, list, R.layout.custom_row_view, new String[]{"category"}, new int[]{R.id.text1});
         requestToApi(true,0);
 

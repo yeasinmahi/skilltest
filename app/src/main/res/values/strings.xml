@@ -3,4 +3,5 @@
     <string name="app_name">Skill Test</string>
     <string name="prev_button"><![CDATA[<]]></string>
     <string name="next_button">></string>
+    <string name="_data_data_">/data/data/</string>
 </resources>

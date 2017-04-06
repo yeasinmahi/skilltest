@@ -1,4 +1,4 @@
-package com.gits.arafat.skilltest;
+package com.gits.arafat.skilltest.Activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,10 +13,13 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.gits.arafat.skilltest.Api.ApiHelper;
+import com.gits.arafat.skilltest.Others.MyInterface;
+import com.gits.arafat.skilltest.Others.Utility;
+import com.gits.arafat.skilltest.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static com.gits.arafat.skilltest.Utility.convertToBangla;
 
 public class QuestionActivity extends AppCompatActivity implements MyInterface.OnTaskCompleted,MyInterface.OnRetry{
     private int categoryId,subCategoryId,currentPosition,questionSize,totalAnsweredQuestion;

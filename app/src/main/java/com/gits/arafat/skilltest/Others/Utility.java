@@ -1,4 +1,4 @@
-package com.gits.arafat.skilltest;
+package com.gits.arafat.skilltest.Others;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -15,6 +15,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.gits.arafat.skilltest.Activity.MainActivity;
+import com.gits.arafat.skilltest.Activity.QuestionActivity;
+import com.gits.arafat.skilltest.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -42,8 +46,13 @@ import java.util.Random;
 
 public class Utility {
     //public static String link="http://gits-bd.com/WebService/SkillTest/apiParser.php";
+    public static String DbName="skillTest.db";
+    public static int DbVersion=1;
     public static String link="http://192.168.1.4:8080/SkillTest/apiParser.php";
-    public static int questionToBeAnswered=10;
+    public static String CategoryTableName="category";
+    public static String SubCategoryTableName="subcategory";
+    public static String QuestionTableName="question";
+    public static int QuestionToBeAnswered =10;
     public static JSONArray convertStringToJson(String s){
         try {
             return new JSONArray(s);
@@ -81,7 +90,7 @@ public class Utility {
             return new String("Exception: " + e.getMessage());
         }
     }
-    static void populateCategory(Object result, ArrayList<HashMap<String, String>> list) {
+    public static void populateCategory(Object result, ArrayList<HashMap<String, String>> list) {
         JSONArray jsonArray = Utility.convertStringToJson((String) result);
         list.clear();
         if (jsonArray!=null){
@@ -111,7 +120,7 @@ public class Utility {
             }
         }
     }
-    static void populateSubCategory(Object result, ArrayList<HashMap<String, String>> list) {
+    public static void populateSubCategory(Object result, ArrayList<HashMap<String, String>> list) {
         JSONArray jsonArray = Utility.convertStringToJson((String) result);
         list.clear();
         if (jsonArray!=null){
@@ -199,8 +208,8 @@ public class Utility {
         return list;
     }
     public static int setQuestionSize(int size){
-        if(size>=questionToBeAnswered){
-            size=questionToBeAnswered;
+        if(size>= QuestionToBeAnswered){
+            size= QuestionToBeAnswered;
         }
         return size;
     }
@@ -218,13 +227,13 @@ public class Utility {
     public static String getCorrectAnswered(ArrayList<HashMap<String, String>> list,int currentPosition){
         return list.get(currentPosition).get("correctAns");
     }
-    enum Status {
+    public enum Status {
         success,
         noInternet,
         noData
     }
     public static ProgressDialog getProgressBar(Context context){
-        ProgressDialog progress = new ProgressDialog(context,R.style.MyTheme);
+        ProgressDialog progress = new ProgressDialog(context, R.style.MyTheme);
         //progress.setTitle("Loading...");
         //progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setCancelable(false);

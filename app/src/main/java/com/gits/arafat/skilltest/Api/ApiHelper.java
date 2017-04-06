@@ -1,7 +1,10 @@
-package com.gits.arafat.skilltest;
+package com.gits.arafat.skilltest.Api;
 
 import android.content.Context;
 import android.os.AsyncTask;
+
+import com.gits.arafat.skilltest.Others.MyInterface;
+import com.gits.arafat.skilltest.Others.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
