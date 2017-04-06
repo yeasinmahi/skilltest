@@ -1,4 +1,4 @@
-package com.example.arafat.skilltest;
+package com.gits.arafat.skilltest;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -33,9 +33,14 @@ public class ApiHelper extends AsyncTask {
                 case "getCategory":
                     link = Utility.link+"?method="+method;
                     break;
-                case "getQuestion":
+                case "getSubCategory":
                     String categoryId = (String)params[1];
                     link = Utility.link+"?method="+method+"&categoryId="+categoryId;
+                    break;
+                case "getQuestion":
+                    categoryId = (String)params[1];
+                    String subCategoryId = (String)params[2];
+                    link = Utility.link+"?method="+method+"&categoryId="+categoryId+"&subCategoryId="+subCategoryId;
                     break;
             }
             return Utility.getResponseFromUrl(link);
@@ -55,6 +60,9 @@ public class ApiHelper extends AsyncTask {
             switch (method){
                 case "getCategory":
                     Utility.populateCategory(result,list);
+                    break;
+                case "getSubCategory":
+                    Utility.populateSubCategory(result,list);
                     break;
                 case "getQuestion":
                     Utility.populateQuestion(result,list);

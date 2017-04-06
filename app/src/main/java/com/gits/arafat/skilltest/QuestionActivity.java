@@ -1,4 +1,4 @@
-package com.example.arafat.skilltest;
+package com.gits.arafat.skilltest;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,8 +16,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.gits.arafat.skilltest.Utility.convertToBangla;
+
 public class QuestionActivity extends AppCompatActivity implements MyInterface.OnTaskCompleted,MyInterface.OnRetry{
-    private int categoryId,currentPosition,questionSize,totalAnsweredQuestion;
+    private int categoryId,subCategoryId,currentPosition,questionSize,totalAnsweredQuestion;
     private TextView questionTextView,correctAnsTextView,headingQuestionStatus;
     private RadioButton optionARadioButton,optionBRadioButton,optionCRadioButton,optionDRadioButton;
     private Button checkButton, nextButton,prvButton;
@@ -38,6 +40,7 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
     private void Init() {
         Intent intent = getIntent();
         categoryId=(Integer) intent.getExtras().get("categoryId");
+        subCategoryId=(Integer) intent.getExtras().get("subCategoryId");
 
         questionTextView= (TextView) findViewById(R.id.questionTextView);
         correctAnsTextView= (TextView) findViewById(R.id.correctAnsTextView);
@@ -64,7 +67,7 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
         if (Utility.isConnectingToInternet(this)){
             progressDialog = Utility.getProgressBar(this);
             progressDialog.show();
-            new ApiHelper(this, this,list).execute("getQuestion",String.valueOf(categoryId));
+            new ApiHelper(this, this,list).execute("getQuestion",String.valueOf(categoryId),String.valueOf(subCategoryId));
         }
         else {
             Utility.popUpWindow(this,this,"Check your internet",true);
@@ -123,7 +126,7 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
     private void setQuestion(int questionNo){
         correctAnsTextView.setText("");
         questionTextView.setText(String.valueOf(questionNo+1)+". "+String.valueOf(list.get(questionNo).get("question")));
-        optionARadioButton.setText("A. "+String.valueOf(list.get(questionNo).get("optionA")));
+        optionARadioButton.setText(convertToBangla("A. "+String.valueOf(list.get(questionNo).get("optionA"))));
         optionBRadioButton.setText("B. "+String.valueOf(list.get(questionNo).get("optionB")));
         optionCRadioButton.setText("C. "+String.valueOf(list.get(questionNo).get("optionC")));
         optionDRadioButton.setText("D. "+String.valueOf(list.get(questionNo).get("optionD")));
@@ -186,12 +189,13 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
             if (text.startsWith(correctAns)){
                 Utility.setQuestionProperty(list,currentPosition,"1","1");
                 correctAnsTextView.setTextColor(Color.parseColor("#0d7700"));
+                correctAnsTextView.setText("Correct Ans");
             }else {
                 Utility.setQuestionProperty(list,currentPosition,"1","0");
                 correctAnsTextView.setTextColor(Color.parseColor("#ff0000"));
+                correctAnsTextView.setText("Wrong!!! Correct Ans is "+correctAns);
             }
             checkButton.setEnabled(false);
-            correctAnsTextView.setText("Correct Ans is "+correctAns);
         }else {
             correctAnsTextView.setTextColor(Color.parseColor("#ff0000"));
             correctAnsTextView.setText("Select one option first");
@@ -201,7 +205,6 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
         if (totalAnsweredQuestion==questionSize){
             Utility.popUpWindow(this,this,"Your total correct answer is\n"+Utility.getTotalCorrectAnswer(list,questionSize)+" out of "+questionSize,false);
         }
-
     }
 
     @Override

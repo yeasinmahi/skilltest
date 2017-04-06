@@ -1,4 +1,4 @@
-package com.example.arafat.skilltest;
+package com.gits.arafat.skilltest;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 public class MainActivity extends ListActivity implements MyInterface.OnTaskCompleted,MyInterface.OnRetry {
     ProgressDialog progressBar;
+    boolean onMainPage=true;
     public ArrayList<HashMap<String,String>> list = new ArrayList<HashMap<String,String>>();
     SimpleAdapter adapter;
     @Override
@@ -21,15 +22,21 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         adapter = new SimpleAdapter(this, list, R.layout.custom_row_view, new String[]{"category"}, new int[]{R.id.text1});
-        requestToApi();
+        requestToApi(true,0);
 
 
     }
-    private void requestToApi(){
+    private void requestToApi(boolean isCategory,int categoryId){
+
         if (Utility.isConnectingToInternet(this)){
             progressBar=Utility.getProgressBar(this);
             progressBar.show();
-            new ApiHelper(this,this,list).execute("getCategory");
+            if (isCategory){
+                new ApiHelper(this,this,list).execute("getCategory");
+            }else {
+                new ApiHelper(this,this,list).execute("getSubCategory",String.valueOf(categoryId));
+            }
+
         }
         else {
             Utility.popUpWindow(this,this,"Check your internet",true);
@@ -39,12 +46,32 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
         super.onListItemClick(l, v, position, id);
         l.setItemsCanFocus(false);
         try {
-            Intent intentMain = new Intent(MainActivity.this, QuestionActivity.class);
-            int categoryId=Integer.parseInt(list.get(position).get("id"));
-            intentMain.putExtra("categoryId", categoryId);
-            startActivity(intentMain);
+            if(list.get(position).containsKey("hasSubcategory")){
+
+                int hasSubCategory=Integer.parseInt(list.get(position).get("hasSubcategory"));
+                int categoryId=Integer.parseInt(list.get(position).get("id"));
+                if(hasSubCategory==1){
+                    onMainPage=false;
+                    requestToApi(false,categoryId);
+                }else {
+                    Intent intentMain = new Intent(MainActivity.this, QuestionActivity.class);
+                    intentMain.putExtra("categoryId", categoryId);
+                    intentMain.putExtra("subCategoryId", 0);
+                    startActivity(intentMain);
+                }
+            }else {
+                int subCategoryId=Integer.parseInt(list.get(position).get("id"));
+                int categoryId=Integer.parseInt(list.get(position).get("categoryId"));
+                Intent intentMain = new Intent(MainActivity.this, QuestionActivity.class);
+                intentMain.putExtra("categoryId", categoryId);
+                intentMain.putExtra("subCategoryId", subCategoryId);
+                startActivity(intentMain);
+            }
+
+
         } catch (Exception e) {
             Log.d("ListItem",e.getMessage());
+            Utility.popUpWindow(this,this,"Data Parsing Error",true);
         }
     }
 
@@ -65,11 +92,16 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
 
     @Override
     public void onRetry() {
-        requestToApi();
+        requestToApi(true,0);
     }
     @Override
     public void onBackPressed() {
-        System.exit(0);
+        if (onMainPage){
+            finish();
+        }else {
+            new ApiHelper(this,this,list).execute("getCategory");
+            onMainPage=true;
+        }
     }
 
 }

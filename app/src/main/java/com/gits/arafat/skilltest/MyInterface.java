@@ -1,4 +1,4 @@
-package com.example.arafat.skilltest;
+package com.gits.arafat.skilltest;
 
 /**
  * Created by Arafat on 11/03/2017.

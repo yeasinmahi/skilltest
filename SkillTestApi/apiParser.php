@@ -8,9 +8,14 @@
 		if($method==='getCategory'){
 			$result = getCategory();
 		}
+		if($method==='getSubCategory'){
+			$categoryId = $_REQUEST['categoryId'];
+			$result = getSubCategory($categoryId);
+		}
 		if($method==='getQuestion'){
 			$categoryId = $_REQUEST['categoryId'];
-			$result = getQuestion($categoryId);
+			$subCategoryId = $_REQUEST['subCategoryId'];
+			$result = getQuestion($categoryId,$subCategoryId);
 		}
 		echo dataResultToJson($result);
 		

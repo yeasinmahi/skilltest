@@ -1,15 +1,15 @@
-package com.example.arafat.skilltest;
+package com.gits.arafat.skilltest;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -40,7 +40,8 @@ import java.util.Random;
  */
 
 public class Utility {
-    public static String link="http://gits-bd.com/WebService/SkillTest/apiParser.php";
+    //public static String link="http://gits-bd.com/WebService/SkillTest/apiParser.php";
+    public static String link="http://192.168.1.4:8080/SkillTest/apiParser.php";
     public static int questionToBeAnswered=10;
     public static JSONArray convertStringToJson(String s){
         try {
@@ -82,6 +83,7 @@ public class Utility {
     }
     static void populateCategory(Object result, ArrayList<HashMap<String, String>> list) {
         JSONArray jsonArray = Utility.convertStringToJson((String) result);
+        list.clear();
         if (jsonArray!=null){
             //list.clear();
             try {
@@ -92,9 +94,41 @@ public class Utility {
                         HashMap<String, String> temp = new HashMap<String, String>();
                         String id = jsonObject.getString("id");
                         String category = jsonObject.getString("category");
+                        String hasSubcategory = jsonObject.getString("hasSubcategory");
 
                         temp.put("id", id);
                         temp.put("category", category);
+                        temp.put("hasSubcategory", hasSubcategory);
+
+                        list.add(temp);
+                    } catch (JSONException e) {
+                        // Oops
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    static void populateSubCategory(Object result, ArrayList<HashMap<String, String>> list) {
+        JSONArray jsonArray = Utility.convertStringToJson((String) result);
+        list.clear();
+        if (jsonArray!=null){
+            //list.clear();
+            try {
+                for (int i=0; i < jsonArray.length(); i++)
+                {
+                    try {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        HashMap<String, String> temp = new HashMap<String, String>();
+                        String id = jsonObject.getString("id");
+                        String subCategoryName = jsonObject.getString("subCategoryName");
+                        String categoryId = jsonObject.getString("categoryId");
+
+                        temp.put("id", id);
+                        temp.put("category", subCategoryName);
+                        temp.put("categoryId", categoryId);
 
                         list.add(temp);
                     } catch (JSONException e) {
@@ -125,6 +159,7 @@ public class Utility {
                         String optionD = jsonObject.getString("optionD");
                         String correctAns = jsonObject.getString("correctAns");
                         String categoryId = jsonObject.getString("categoryId");
+                        String subCategoryId = jsonObject.getString("subCategoryId");
 
                         temp.put("id", id);
                         temp.put("question", question);
@@ -134,6 +169,7 @@ public class Utility {
                         temp.put("optionD", optionD);
                         temp.put("correctAns", correctAns);
                         temp.put("categoryId", categoryId);
+                        temp.put("subCategoryId", subCategoryId);
                         temp.put("isAnswered", "0");
                         temp.put("isCorrect", "0");
 
@@ -276,6 +312,13 @@ public class Utility {
             }
         });
         dialog.show();
+    }
+    public static Spanned convertToBangla(String s){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            return Html.fromHtml(s);
+        }
     }
 }
 

@@ -5,14 +5,16 @@
 // $password = "1234";
 // $dbname = "angandb";
 
-$servername = "192.168.0.100";
+$servername = "192.168.1.4";
 $username = "yeasinmahi";
 $password = "arafat7218";
 $dbname = "iqTest";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
+/* change character set to utf8 */
+  if (!$conn->set_charset("utf8")) {
+  }
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 

@@ -1,4 +1,4 @@
-package com.example.arafat.skilltest;
+package com.gits.arafat.skilltest;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.arafat.skilltest;
+package com.gits.arafat.skilltest;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
