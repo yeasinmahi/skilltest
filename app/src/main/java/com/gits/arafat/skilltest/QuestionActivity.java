@@ -189,7 +189,7 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
             if (text.startsWith(correctAns)){
                 Utility.setQuestionProperty(list,currentPosition,"1","1");
                 correctAnsTextView.setTextColor(Color.parseColor("#0d7700"));
-                correctAnsTextView.setText("Correct Ans");
+                correctAnsTextView.setText("Your ans is Correct");
             }else {
                 Utility.setQuestionProperty(list,currentPosition,"1","0");
                 correctAnsTextView.setTextColor(Color.parseColor("#ff0000"));
