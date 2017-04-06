@@ -126,8 +126,8 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
     private void setQuestion(int questionNo){
         correctAnsTextView.setText("");
         questionTextView.setText(String.valueOf(questionNo+1)+". "+String.valueOf(list.get(questionNo).get("question")));
-        optionARadioButton.setText(convertToBangla("A. "+String.valueOf(list.get(questionNo).get("optionA"))));
-        optionBRadioButton.setText("B. "+String.valueOf(list.get(questionNo).get("optionB")));
+        optionARadioButton.setText("A. "+String.valueOf(list.get(questionNo).get("optionA")));
+        optionBRadioButton.setText("B. "+Utility.convertToBanglaa(String.valueOf(list.get(questionNo).get("optionB"))));
         optionCRadioButton.setText("C. "+String.valueOf(list.get(questionNo).get("optionC")));
         optionDRadioButton.setText("D. "+String.valueOf(list.get(questionNo).get("optionD")));
 

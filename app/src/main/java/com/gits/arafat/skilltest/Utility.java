@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,8 +65,7 @@ public class Utility {
             request.setURI(new URI(link));
 
             HttpResponse response = client.execute(request);
-            BufferedReader in = new BufferedReader(new
-                    InputStreamReader(response.getEntity().getContent()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
             StringBuffer sb = new StringBuffer("");
             String line="";
@@ -320,5 +320,15 @@ public class Utility {
             return Html.fromHtml(s);
         }
     }
+    public static String convertToBanglaa(String s){
+        try {
+            byte[] bytes = s.getBytes("UTF-8");
+            return new String(bytes, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
 }
 
