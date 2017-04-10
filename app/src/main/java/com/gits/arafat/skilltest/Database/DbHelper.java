@@ -11,8 +11,9 @@ import com.gits.arafat.skilltest.Others.Utility;
 
 import java.util.ArrayList;
 
-import static com.gits.arafat.skilltest.Others.Utility.DbName;
-import static com.gits.arafat.skilltest.Others.Utility.DbVersion;
+import static com.gits.arafat.skilltest.Database.DBUtility.DbName;
+import static com.gits.arafat.skilltest.Database.DBUtility.DbVersion;
+
 
 public class DbHelper extends SQLiteOpenHelper {
 	public DbHelper(Context context) {
@@ -36,7 +37,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		// Rest Index Of Spinner from database
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor;
-		cursor = db.query(Utility.CategoryTableName, null, null, null, null, null, null);
+		cursor = db.query(DBUtility.CategoryTableName, null, null, null, null, null, null);
 		if (cursor != null && cursor.getCount() > 0) {
 			while (cursor.moveToNext()) {
 				Category category = new Category();
@@ -57,7 +58,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		contentValues.put("category", String.valueOf(category.getCategory()));
 		contentValues.put("hasSubcategory", category.isHasSubcategory());
 		SQLiteDatabase db = getReadableDatabase();
-		long row = db.insert(Utility.CategoryTableName,null,contentValues);
+		long row = db.insert(DBUtility.CategoryTableName,null,contentValues);
 		db.close();
 		return row>0;
 	}

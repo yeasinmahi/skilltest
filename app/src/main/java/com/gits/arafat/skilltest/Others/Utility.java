@@ -45,15 +45,9 @@ import java.util.Random;
  */
 
 public class Utility {
-    public static String link="http://gits-bd.com/WebService/SkillTest/apiParser.php";
-    //public static String link="http://192.168.1.4:8080/SkillTest/apiParser.php";
-    public static String DbName="skillTest.db";
-    public static int DbVersion=1;
-    public static String CategoryTableName="category";
-    public static String SubCategoryTableName="subcategory";
-    public static String QuestionTableName="question";
+    //public static String link="http://gits-bd.com/WebService/SkillTest/apiParser.php";
+    public static String link="http://192.168.1.4:8080/SkillTest/apiParser.php";
     public static int QuestionToBeAnswered =10;
-
     public static JSONArray convertStringToJson(String s){
         try {
             return new JSONArray(s);

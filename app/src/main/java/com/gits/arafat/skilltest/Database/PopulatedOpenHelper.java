@@ -13,7 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.gits.arafat.skilltest.Others.Utility.DbName;
+import static com.gits.arafat.skilltest.Database.DBUtility.DbName;
+
 
 public class PopulatedOpenHelper extends SQLiteOpenHelper {
 	private static PopulatedOpenHelper sInstant;
@@ -52,8 +53,12 @@ public class PopulatedOpenHelper extends SQLiteOpenHelper {
 		boolean dbExist=CheckDB();
 		if(!dbExist){
 			this.getReadableDatabase();
-			Log.e(getClass().getName(), "DataBase not Exits And Copy From Assets");
-			CopyToDatabase();
+			Log.e(getClass().getName(), "DataBase not Exits And Creating New");
+			//CopyToDatabase();
+            CreateNewDatabase();
+			if (database!=null){
+				CreateTables();
+			}
 		}
 		else {
 			Log.e(getClass().getName(), "Database Already exist");
@@ -78,6 +83,13 @@ public class PopulatedOpenHelper extends SQLiteOpenHelper {
 		}
 		
 	}
+	private void CreateNewDatabase(){
+        database = SQLiteDatabase.openDatabase(DbPath+DbName, null, SQLiteDatabase.OPEN_READWRITE);
+	}
+	private void CreateTables(){
+		Table.getInstance(database).createAllTable();
+	}
+
 
 	private boolean CheckDB(){
 		String path = DbPath+DbName;
