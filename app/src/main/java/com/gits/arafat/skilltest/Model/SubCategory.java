@@ -23,14 +23,14 @@ public class SubCategory {
         this.subCategoryName = subCategoryName;
     }
 
-    public int getCategory() {
-        return category;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(int category) {
-        this.category = category;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     private String subCategoryName;
-    private int category;
+    private int categoryId;
 }

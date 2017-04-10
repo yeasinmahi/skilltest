@@ -33,7 +33,7 @@ public class ApiHelper extends AsyncTask {
         try{
             method = (String)params[0];
             switch (method){
-                case "getCategory":
+                case "getCategoryId":
                     link = Utility.link+"?method="+method;
                     break;
                 case "getSubCategory":
@@ -53,7 +53,7 @@ public class ApiHelper extends AsyncTask {
     }
     @Override
     protected void onPostExecute(Object result){
-        if (result.toString().contains("Exception")) {
+        if (result.toString().contains("Exception") || result.equals("<br />")) {
             listener.onTaskCompleted(Utility.Status.noInternet);
         }
         else if(result.toString().equals("")){
@@ -61,7 +61,7 @@ public class ApiHelper extends AsyncTask {
         }
         else {
             switch (method){
-                case "getCategory":
+                case "getCategoryId":
                     Utility.populateCategory(result,list);
                     break;
                 case "getSubCategory":

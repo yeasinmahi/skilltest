@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.gits.arafat.skilltest.Api.ApiHelper;
+import com.gits.arafat.skilltest.Database.DbHelper;
 import com.gits.arafat.skilltest.Database.PopulatedOpenHelper;
+import com.gits.arafat.skilltest.Model.Category;
+import com.gits.arafat.skilltest.Model.SubCategory;
 import com.gits.arafat.skilltest.Others.MyInterface;
 import com.gits.arafat.skilltest.Others.Utility;
 import com.gits.arafat.skilltest.R;
@@ -29,8 +33,8 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
         setContentView(R.layout.activity_main);
         PopulatedOpenHelper.getInstance(getApplicationContext());
         adapter = new SimpleAdapter(this, list, R.layout.custom_row_view, new String[]{"category"}, new int[]{R.id.text1});
-        requestToApi(true,0);
-
+        //requestToApi(true,0);
+        getItemFromDatabase(true,0);
 
     }
     private void requestToApi(boolean isCategory,int categoryId){
@@ -39,7 +43,7 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
             progressBar=Utility.getProgressBar(this);
             progressBar.show();
             if (isCategory){
-                new ApiHelper(this,this,list).execute("getCategory");
+                new ApiHelper(this,this,list).execute("getCategoryId");
             }else {
                 new ApiHelper(this,this,list).execute("getSubCategory",String.valueOf(categoryId));
             }
@@ -48,6 +52,38 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
         else {
             Utility.popUpWindow(this,this,"Check your internet",true);
         }
+    }
+    private void getItemFromDatabase(boolean isCategory,int categoryId){
+        DbHelper dbHelper = new DbHelper(this);
+        progressBar=Utility.getProgressBar(this);
+        progressBar.show();
+        if (isCategory){
+            ArrayList<Category> categories=dbHelper.getAllCategory();
+            list.clear();
+            for (Category category:categories) {
+                HashMap<String, String> temp = new HashMap<String, String>();
+                temp.put("id", String.valueOf(category.getId()));
+                temp.put("category", category.getCategory());
+                temp.put("hasSubcategory", String.valueOf(category.getHasSubcategory()));
+
+                list.add(temp);
+            }
+        }else {
+            ArrayList<SubCategory> subCategories=dbHelper.getSubCategory(categoryId);
+            list.clear();
+            for (SubCategory subCategory:subCategories) {
+                HashMap<String, String> temp = new HashMap<String, String>();
+                temp.put("id", String.valueOf(subCategory.getId()));
+                temp.put("category", subCategory.getSubCategoryName());
+                temp.put("categoryId", String.valueOf(subCategory.getCategoryId()));
+                list.add(temp);
+            }
+        }
+
+        setListAdapter(adapter);
+        Log.d("Db:","get Data From Database");
+        progressBar.cancel();
+        progressBar.dismiss();
     }
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
@@ -59,7 +95,8 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
                 int categoryId=Integer.parseInt(list.get(position).get("id"));
                 if(hasSubCategory==1){
                     onMainPage=false;
-                    requestToApi(false,categoryId);
+                    //requestToApi(false,categoryId);
+                    getItemFromDatabase(false,categoryId);
                 }else {
                     Intent intentMain = new Intent(MainActivity.this, QuestionActivity.class);
                     intentMain.putExtra("categoryId", categoryId);
@@ -106,7 +143,8 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
         if (onMainPage){
             finish();
         }else {
-            new ApiHelper(this,this,list).execute("getCategory");
+            //new ApiHelper(this,this,list).execute("getCategoryId");
+            getItemFromDatabase(true,0);
             onMainPage=true;
         }
     }

@@ -23,14 +23,14 @@ public class Category {
         this.category = category;
     }
 
-    public boolean isHasSubcategory() {
+    public int getHasSubcategory() {
         return hasSubcategory;
     }
 
-    public void setHasSubcategory(boolean hasSubcategory) {
+    public void setHasSubcategory(int hasSubcategory) {
         this.hasSubcategory = hasSubcategory;
     }
 
     private String category;
-    private boolean hasSubcategory;
+    private int hasSubcategory;
 }
