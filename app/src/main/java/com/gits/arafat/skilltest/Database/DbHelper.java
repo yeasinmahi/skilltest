@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.gits.arafat.skilltest.Model.Category;
+import com.gits.arafat.skilltest.Model.Question;
 import com.gits.arafat.skilltest.Model.SubCategory;
 
 import java.util.ArrayList;
@@ -73,6 +74,33 @@ public class DbHelper extends SQLiteOpenHelper {
 		}
 		db.close();
 		return subCategories;
+	}
+	public ArrayList<Question> getQuestion(int categoryId, int subCategoryId) {
+		ArrayList<Question> questions = new ArrayList<Question>();
+		// Rest Index Of Spinner from database
+		SQLiteDatabase db = getReadableDatabase();
+		Cursor cursor;
+		cursor = db.rawQuery("select * from "+DBUtility.QuestionTableName+" where categoryId = "+categoryId+" and subCategoryId="+subCategoryId,null);
+		if (cursor != null && cursor.getCount() > 0) {
+			while (cursor.moveToNext()) {
+				Question question = new Question();
+				question.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex("id"))));
+				question.setQuestion(cursor.getString(cursor.getColumnIndex("question")));
+				question.setOptionA(cursor.getString(cursor.getColumnIndex("optionA")));
+				question.setOptionB(cursor.getString(cursor.getColumnIndex("optionB")));
+				question.setOptionC(cursor.getString(cursor.getColumnIndex("optionC")));
+				question.setOptionD(cursor.getString(cursor.getColumnIndex("optionD")));
+				question.setCorrectAns(cursor.getString(cursor.getColumnIndex("correctAns")));
+				question.setCategoryId(Integer.parseInt(cursor.getString(cursor.getColumnIndex("categoryId"))));
+				question.setSubCategoryId(Integer.parseInt(cursor.getString(cursor.getColumnIndex("subCategoryId"))));
+				questions.add(question);
+			}
+		}
+		if (cursor != null) {
+			cursor.close();
+		}
+		db.close();
+		return questions;
 	}
 	public boolean insertCategory(Category category) {
 		ContentValues contentValues = new ContentValues();

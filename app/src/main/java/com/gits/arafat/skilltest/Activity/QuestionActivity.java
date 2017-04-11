@@ -14,6 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gits.arafat.skilltest.Api.ApiHelper;
+import com.gits.arafat.skilltest.Database.DbHelper;
+import com.gits.arafat.skilltest.Model.Category;
+import com.gits.arafat.skilltest.Model.Question;
 import com.gits.arafat.skilltest.Others.MyInterface;
 import com.gits.arafat.skilltest.Others.Utility;
 import com.gits.arafat.skilltest.R;
@@ -29,7 +32,7 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
     private LinearLayout checkLayout;
     private RelativeLayout nextLayout;
     private RadioGroup radioGroup;
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressBar;
     public ArrayList<HashMap<String,String> > list = new ArrayList<HashMap<String,String>>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +71,35 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
 
     private void requestToApi() {
         if (Utility.isConnectingToInternet(this)){
-            progressDialog = Utility.getProgressBar(this);
-            progressDialog.show();
+            progressBar = Utility.getProgressBar(this);
+            progressBar.show();
             new ApiHelper(this, this,list).execute("getQuestion",String.valueOf(categoryId),String.valueOf(subCategoryId));
         }
         else {
             Utility.popUpWindow(this,this,"Check your internet",true);
         }
+    }
+    private void getQuestionFomDatabase(){
+        DbHelper dbHelper = new DbHelper(this);
+        progressBar=Utility.getProgressBar(this);
+        progressBar.show();
+            ArrayList<Question> questions=dbHelper.getQuestion(categoryId,subCategoryId);
+            list.clear();
+            for (Question question:questions) {
+                HashMap<String, String> temp = new HashMap<String, String>();
+                temp.put("id", String.valueOf(question.getId()));
+                temp.put("question", question.getQuestion());
+                temp.put("optionA", question.getOptionA());
+                temp.put("optionB", question.getOptionB());
+                temp.put("optionC", question.getOptionC());
+                temp.put("optionD", question.getOptionD());
+                temp.put("correctAns", question.getCorrectAns());
+                temp.put("categoryId", String.valueOf(question.getCategoryId()));
+                temp.put("subCategoryId", String.valueOf(question.getSubCategoryId()));
+                temp.put("isAnswered", "0");
+                temp.put("isCorrect", "0");
+                list.add(temp);
+            }
     }
 
     @Override
@@ -107,8 +132,8 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
             setControlVisibility(false);
             Utility.popUpWindow(this,this,"Check your internet",true);
         }
-        progressDialog.cancel();
-        progressDialog.dismiss();
+        progressBar.cancel();
+        progressBar.dismiss();
     }
     public void setControlVisibility(boolean b){
         if (b){
