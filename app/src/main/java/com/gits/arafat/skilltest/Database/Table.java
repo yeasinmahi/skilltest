@@ -86,8 +86,8 @@ public class Table {
         Log.d("Table:","table created successfully");
     }
     private void executeQuery(String[] sql){
-        for (String s:sql) {
-            database.execSQL(s);
+        for (int i=0;i<sql.length;i++) {
+            database.execSQL(sql[i]);
             Log.d("Question:",sql.length +" row inserting");
         }
     }
