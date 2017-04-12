@@ -1,5 +1,10 @@
 package com.gits.arafat.skilltest.Api;
 
+import android.widget.ArrayAdapter;
+
+import com.gits.arafat.skilltest.Model.Category;
+import com.gits.arafat.skilltest.Model.Question;
+import com.gits.arafat.skilltest.Model.SubCategory;
 import com.gits.arafat.skilltest.Others.Utility;
 
 import org.json.JSONArray;
@@ -14,7 +19,7 @@ import java.util.HashMap;
  */
 
 public class JsonParser {
-    public static JSONArray convertStringToJson(String s){
+    private static JSONArray convertStringToJson(String s){
         try {
             return new JSONArray(s);
         } catch (JSONException e) {
@@ -22,26 +27,25 @@ public class JsonParser {
         }
         return null;
     }
-    public static void populateCategory(Object result, ArrayList<HashMap<String, String>> list) {
+    public static ArrayList<Category> getCategories(Object result) {
         JSONArray jsonArray = convertStringToJson((String) result);
-        list.clear();
+        ArrayList<Category> categories = new ArrayList<Category>();
         if (jsonArray!=null){
-            //list.clear();
             try {
                 for (int i=0; i < jsonArray.length(); i++)
                 {
                     try {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        HashMap<String, String> temp = new HashMap<String, String>();
                         String id = jsonObject.getString("id");
-                        String category = jsonObject.getString("category");
+                        String categoryName = jsonObject.getString("category");
                         String hasSubcategory = jsonObject.getString("hasSubcategory");
 
-                        temp.put("id", id);
-                        temp.put("category", category);
-                        temp.put("hasSubcategory", hasSubcategory);
+                        Category category = new Category();
+                        category.setId(Integer.parseInt(id));
+                        category.setCategory(categoryName);
+                        category.setHasSubcategory(Integer.parseInt(hasSubcategory));
 
-                        list.add(temp);
+                        categories.add(category);
                     } catch (JSONException e) {
                         // Oops
                     }
@@ -51,10 +55,11 @@ public class JsonParser {
                 e.printStackTrace();
             }
         }
+        return categories;
     }
-    public static void populateSubCategory(Object result, ArrayList<HashMap<String, String>> list) {
+    public static ArrayList<SubCategory> getSubCategories(Object result) {
         JSONArray jsonArray = convertStringToJson((String) result);
-        list.clear();
+        ArrayList<SubCategory> subCategories = new ArrayList<SubCategory>();
         if (jsonArray!=null){
             //list.clear();
             try {
@@ -62,16 +67,16 @@ public class JsonParser {
                 {
                     try {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        HashMap<String, String> temp = new HashMap<String, String>();
                         String id = jsonObject.getString("id");
                         String subCategoryName = jsonObject.getString("subCategoryName");
                         String categoryId = jsonObject.getString("categoryId");
 
-                        temp.put("id", id);
-                        temp.put("category", subCategoryName);
-                        temp.put("categoryId", categoryId);
+                        SubCategory subCategory = new SubCategory();
+                        subCategory.setId(Integer.parseInt(id));
+                        subCategory.setSubCategoryName(subCategoryName);
+                        subCategory.setCategoryId(Integer.parseInt(categoryId));
 
-                        list.add(temp);
+                        subCategories.add(subCategory);
                     } catch (JSONException e) {
                         // Oops
                     }
@@ -80,10 +85,11 @@ public class JsonParser {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }return subCategories;
     }
-    public static void populateQuestion(Object result, ArrayList list) {
+    public static ArrayList<Question> getQuestions(Object result) {
         JSONArray jsonArray = convertStringToJson((String) result);
+        ArrayList<Question> questions = new ArrayList<Question>();
         if (!jsonArray.equals(null)){
             //list.clear();
             try {
@@ -93,7 +99,7 @@ public class JsonParser {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         HashMap<String, String> temp = new HashMap<String, String>();
                         String id = jsonObject.getString("id");
-                        String question = jsonObject.getString("question");
+                        String ques = jsonObject.getString("question");
                         String optionA = jsonObject.getString("optionA");
                         String optionB = jsonObject.getString("optionB");
                         String optionC = jsonObject.getString("optionC");
@@ -102,19 +108,18 @@ public class JsonParser {
                         String categoryId = jsonObject.getString("categoryId");
                         String subCategoryId = jsonObject.getString("subCategoryId");
 
-                        temp.put("id", id);
-                        temp.put("question", question);
-                        temp.put("optionA", optionA);
-                        temp.put("optionB", optionB);
-                        temp.put("optionC", optionC);
-                        temp.put("optionD", optionD);
-                        temp.put("correctAns", correctAns);
-                        temp.put("categoryId", categoryId);
-                        temp.put("subCategoryId", subCategoryId);
-                        temp.put("isAnswered", "0");
-                        temp.put("isCorrect", "0");
+                        Question question = new Question();
+                        question.setId(Integer.parseInt(id));
+                        question.setQuestion(ques);
+                        question.setOptionA(optionA);
+                        question.setOptionB(optionB);
+                        question.setOptionC(optionC);
+                        question.setOptionD(optionD);
+                        question.setCorrectAns(correctAns);
+                        question.setCategoryId(Integer.parseInt(categoryId));
+                        question.setSubCategoryId(Integer.parseInt(subCategoryId));
 
-                        list.add(temp);
+                        questions.add(question);
                     } catch (JSONException e) {
                         // Oops
                     }
@@ -124,5 +129,6 @@ public class JsonParser {
                 e.printStackTrace();
             }
         }
+        return questions;
     }
 }

@@ -62,13 +62,13 @@ public class ApiHelper extends AsyncTask {
         else {
             switch (method){
                 case "getCategoryId":
-                    JsonParser.populateCategory(result,list);
+                    JsonParser.getCategories(result,list);
                     break;
                 case "getSubCategory":
-                    JsonParser.populateSubCategory(result,list);
+                    JsonParser.getSubCategories(result,list);
                     break;
                 case "getQuestion":
-                    JsonParser.populateQuestion(result,list);
+                    JsonParser.getQuestions(result,list);
                     break;
             }
             listener.onTaskCompleted(Utility.Status.success);

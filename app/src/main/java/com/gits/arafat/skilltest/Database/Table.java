@@ -1,6 +1,5 @@
 package com.gits.arafat.skilltest.Database;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
