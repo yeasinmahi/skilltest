@@ -64,9 +64,8 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
 
     }
     public void InitConfig(){
-        requestToApi();
-        setControlVisibility(false);
-
+        //requestToApi();
+        getQuestionFomDatabase();
     }
 
     private void requestToApi() {
@@ -74,6 +73,7 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
             progressBar = Utility.getProgressBar(this);
             progressBar.show();
             new ApiHelper(this, this,list).execute("getQuestion",String.valueOf(categoryId),String.valueOf(subCategoryId));
+
         }
         else {
             Utility.popUpWindow(this,this,"Check your internet",true);
@@ -100,6 +100,27 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
                 temp.put("isCorrect", "0");
                 list.add(temp);
             }
+
+        questionSize=list.size();
+        if(questionSize>0){
+            setControlVisibility(true);
+            list = Utility.getRandomizationList(list);
+            questionSize = Utility.setQuestionSize(questionSize);
+            headingQuestionStatus.setText(String.valueOf(totalAnsweredQuestion)+"/"+ String.valueOf(questionSize));
+            setQuestion(0);
+            if (currentPosition>=questionSize-1){
+                nextButton.setVisibility(View.INVISIBLE);
+            }
+            if (currentPosition>=0){
+                prvButton.setVisibility(View.INVISIBLE);
+            }
+
+        }else {
+            setControlVisibility(false);
+            Utility.popUpWindow(this,this,"No question available",true);
+        }
+        progressBar.cancel();
+        progressBar.dismiss();
     }
 
     @Override
@@ -237,6 +258,7 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
 
     @Override
     public void onRetry() {
-        requestToApi();
+        //requestToApi();
+        getQuestionFomDatabase();
     }
 }

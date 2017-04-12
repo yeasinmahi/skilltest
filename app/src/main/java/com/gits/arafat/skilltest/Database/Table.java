@@ -71,7 +71,12 @@ public class Table {
                 "(1, 'Practice Bangla', 5),\n" +
                 "(2, 'Practice English', 5),\n" +
                 "(3, 'Practice Mathematics ', 5),\n" +
-                "(4, 'Practice General Knowledge', 5);";
+                "(4, 'Practice General Knowledge', 5),\n" +
+                "(5, '24th BCS', 5),\n" +
+                "(6, '25th BCS', 5),\n" +
+                "(7, '26th BCS', 5),\n" +
+                "(8, '28th BCS', 5),\n" +
+                "(9, '29th BCS', 5);";
         executeQuery(sql);
     }
     private void insertIntoQuestion(){
