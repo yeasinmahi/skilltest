@@ -15,6 +15,7 @@ import com.gits.arafat.skilltest.Database.DbHelper;
 import com.gits.arafat.skilltest.Database.PopulatedOpenHelper;
 import com.gits.arafat.skilltest.Model.Category;
 import com.gits.arafat.skilltest.Model.SubCategory;
+import com.gits.arafat.skilltest.NetworkManager.NetworkUtil;
 import com.gits.arafat.skilltest.Others.MyInterface;
 import com.gits.arafat.skilltest.Others.Utility;
 import com.gits.arafat.skilltest.R;
@@ -39,13 +40,13 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
     }
     private void requestToApi(boolean isCategory,int categoryId){
 
-        if (Utility.isConnectingToInternet(this)){
+        if (NetworkUtil.isConnectingToInternet(this)){
             progressBar=Utility.getProgressBar(this);
             progressBar.show();
             if (isCategory){
-                new ApiHelper(this,this,list).execute("getCategoryId");
+                new ApiHelper(this).execute("getCategory");
             }else {
-                new ApiHelper(this,this,list).execute("getSubCategory",String.valueOf(categoryId));
+                new ApiHelper(this).execute("getSubCategory",String.valueOf(categoryId));
             }
 
         }

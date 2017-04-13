@@ -133,17 +133,7 @@ public class Utility {
         return progress;
     }
 
-    public static boolean isConnectingToInternet(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo info = connectivity.getActiveNetworkInfo();
-            if (info != null)
-                if (info.getState() == NetworkInfo.State.CONNECTED) {
-                    return true;
-                }
-        }
-        return false;
-    }
+
 
     public static void popUpWindow(final Context context, final MyInterface.OnRetry listener, String msg, boolean isExceptionDialog) {
         // custom dialog

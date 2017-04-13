@@ -17,6 +17,7 @@ import com.gits.arafat.skilltest.Api.ApiHelper;
 import com.gits.arafat.skilltest.Database.DbHelper;
 import com.gits.arafat.skilltest.Model.Category;
 import com.gits.arafat.skilltest.Model.Question;
+import com.gits.arafat.skilltest.NetworkManager.NetworkUtil;
 import com.gits.arafat.skilltest.Others.MyInterface;
 import com.gits.arafat.skilltest.Others.Utility;
 import com.gits.arafat.skilltest.R;
@@ -69,10 +70,10 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
     }
 
     private void requestToApi() {
-        if (Utility.isConnectingToInternet(this)){
+        if (NetworkUtil.isConnectingToInternet(this)){
             progressBar = Utility.getProgressBar(this);
             progressBar.show();
-            new ApiHelper(this, this,list).execute("getQuestion",String.valueOf(categoryId),String.valueOf(subCategoryId));
+            new ApiHelper(this).execute("getQuestion",String.valueOf(categoryId),String.valueOf(subCategoryId));
 
         }
         else {

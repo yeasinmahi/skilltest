@@ -2,7 +2,12 @@ package com.gits.arafat.skilltest.Api;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ArrayAdapter;
 
+import com.gits.arafat.skilltest.Model.Category;
+import com.gits.arafat.skilltest.Model.Question;
+import com.gits.arafat.skilltest.Model.SubCategory;
 import com.gits.arafat.skilltest.Others.MyInterface;
 import com.gits.arafat.skilltest.Others.Utility;
 
@@ -14,17 +19,9 @@ import java.util.HashMap;
  */
 
 public class ApiHelper extends AsyncTask {
-    private static ArrayList<HashMap<String,String>> list;
     private Context context;
-    private MyInterface.OnTaskCompleted listener;
-    public ApiHelper(Context context, MyInterface.OnTaskCompleted listener, ArrayList list){
+    public ApiHelper(Context context){
         this.context=context;
-        this.listener = listener;
-        this.list=list;
-    }
-    public ApiHelper(Context context, MyInterface.OnTaskCompleted listener){
-        this.context=context;
-        this.listener = listener;
     }
     private String method;
     @Override
@@ -33,7 +30,7 @@ public class ApiHelper extends AsyncTask {
         try{
             method = (String)params[0];
             switch (method){
-                case "getCategoryId":
+                case "getCategory":
                     link = Utility.link+"?method="+method;
                     break;
                 case "getSubCategory":
@@ -54,24 +51,27 @@ public class ApiHelper extends AsyncTask {
     @Override
     protected void onPostExecute(Object result){
         if (result.toString().contains("Exception") || result.equals("<br />")) {
-            listener.onTaskCompleted(Utility.Status.noInternet);
+            //listener.onTaskCompleted(Utility.Status.noInternet);
+            Log.d("ApiHelper","Exception: " + result);
         }
         else if(result.toString().equals("")){
-            listener.onTaskCompleted(Utility.Status.noData);
+            //listener.onTaskCompleted(Utility.Status.noData);
+            Log.d("ApiHelper","Exception: " + result);
         }
         else {
             switch (method){
-                case "getCategoryId":
-                    JsonParser.getCategories(result);
+                case "getCategory":
+                    ArrayList<Category> categories = JsonParser.getCategories(result);
                     break;
                 case "getSubCategory":
-                    JsonParser.getSubCategories(result);
+                    ArrayList<SubCategory> subCategories = JsonParser.getSubCategories(result);
                     break;
                 case "getQuestion":
-                    JsonParser.getQuestions(result);
+                    ArrayList<Question> questions = JsonParser.getQuestions(result);
                     break;
             }
-            listener.onTaskCompleted(Utility.Status.success);
+            Log.d("ApiHelper","Method : " +method+" \nresult: "+ result);
+            //listener.onTaskCompleted(Utility.Status.success);
         }
     }
 
