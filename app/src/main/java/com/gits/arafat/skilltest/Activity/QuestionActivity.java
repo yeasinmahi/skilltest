@@ -81,10 +81,9 @@ public class QuestionActivity extends AppCompatActivity implements MyInterface.O
         }
     }
     private void getQuestionFomDatabase(){
-        DbHelper dbHelper = new DbHelper(this);
         progressBar=Utility.getProgressBar(this);
         progressBar.show();
-            ArrayList<Question> questions=dbHelper.getQuestion(categoryId,subCategoryId);
+            ArrayList<Question> questions=DbHelper.getInstance(getApplicationContext()).getQuestion(categoryId,subCategoryId);
             list.clear();
             for (Question question:questions) {
                 HashMap<String, String> temp = new HashMap<String, String>();

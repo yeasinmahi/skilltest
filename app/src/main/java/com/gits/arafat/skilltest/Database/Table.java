@@ -80,7 +80,6 @@ public class Table {
     }
     private void insertIntoQuestion(){
         PreQuestionData preQuestionData = new PreQuestionData();
-
         String[] sql=preQuestionData.getQuestionInsertText();
         executeQuery(sql);
     }

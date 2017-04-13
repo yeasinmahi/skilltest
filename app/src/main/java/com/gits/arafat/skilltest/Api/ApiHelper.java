@@ -3,16 +3,15 @@ package com.gits.arafat.skilltest.Api;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
+import com.gits.arafat.skilltest.Database.DBUtility;
+import com.gits.arafat.skilltest.Database.DbHelper;
 import com.gits.arafat.skilltest.Model.Category;
 import com.gits.arafat.skilltest.Model.Question;
 import com.gits.arafat.skilltest.Model.SubCategory;
-import com.gits.arafat.skilltest.Others.MyInterface;
 import com.gits.arafat.skilltest.Others.Utility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Arafat on 03/03/2017.
@@ -23,24 +22,21 @@ public class ApiHelper extends AsyncTask {
     public ApiHelper(Context context){
         this.context=context;
     }
-    private String method;
+    private String tableName;
     @Override
     protected Object doInBackground(Object[] params) {
         String link="";
         try{
-            method = (String)params[0];
-            switch (method){
-                case "getCategory":
-                    link = Utility.link+"?method="+method;
+            tableName = (String)params[0];
+            switch (tableName){
+                case "category":
+                    link = Utility.link+"?tableName="+ tableName +"&&id="+ DbHelper.getInstance(context).getLastId(DBUtility.CategoryTableName);
                     break;
-                case "getSubCategory":
-                    String categoryId = (String)params[1];
-                    link = Utility.link+"?method="+method+"&categoryId="+categoryId;
+                case "subcategory":
+                    link = Utility.link+"?tableName="+ tableName +"&&id="+ DbHelper.getInstance(context).getLastId(DBUtility.SubCategoryTableName);
                     break;
-                case "getQuestion":
-                    categoryId = (String)params[1];
-                    String subCategoryId = (String)params[2];
-                    link = Utility.link+"?method="+method+"&categoryId="+categoryId+"&subCategoryId="+subCategoryId;
+                case "question":
+                    link = Utility.link+"?tableName="+ tableName +"&&id="+ DbHelper.getInstance(context).getLastId(DBUtility.QuestionTableName);
                     break;
             }
             return Utility.getResponseFromUrl(link);
@@ -59,18 +55,27 @@ public class ApiHelper extends AsyncTask {
             Log.d("ApiHelper","Exception: " + result);
         }
         else {
-            switch (method){
+            switch (tableName){
                 case "getCategory":
                     ArrayList<Category> categories = JsonParser.getCategories(result);
+                    if (categories.size()>0){
+                        DbHelper.getInstance(context).insertCategory(categories);
+                    }
                     break;
                 case "getSubCategory":
                     ArrayList<SubCategory> subCategories = JsonParser.getSubCategories(result);
+                    if (subCategories.size()>0){
+                        DbHelper.getInstance(context).insertSubCategory(subCategories);
+                    }
                     break;
                 case "getQuestion":
                     ArrayList<Question> questions = JsonParser.getQuestions(result);
+                    if (questions.size()>0){
+                        DbHelper.getInstance(context).insertQuestion(questions);
+                    }
                     break;
             }
-            Log.d("ApiHelper","Method : " +method+" \nresult: "+ result);
+            Log.d("ApiHelper","Method : " + tableName +" \nresult: "+ result);
             //listener.onTaskCompleted(Utility.Status.success);
         }
     }

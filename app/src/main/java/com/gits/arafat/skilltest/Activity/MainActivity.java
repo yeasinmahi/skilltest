@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.gits.arafat.skilltest.Api.ApiHelper;
+import com.gits.arafat.skilltest.Database.DBUtility;
 import com.gits.arafat.skilltest.Database.DbHelper;
 import com.gits.arafat.skilltest.Database.PopulatedOpenHelper;
 import com.gits.arafat.skilltest.Model.Category;
@@ -34,32 +35,25 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
         setContentView(R.layout.activity_main);
         PopulatedOpenHelper.getInstance(getApplicationContext());
         adapter = new SimpleAdapter(this, list, R.layout.custom_row_view, new String[]{"category"}, new int[]{R.id.text1});
-        //requestToApi(true,0);
+        requestToApi();
         getItemFromDatabase(true,0);
 
     }
-    private void requestToApi(boolean isCategory,int categoryId){
+    private void requestToApi(){
 
         if (NetworkUtil.isConnectingToInternet(this)){
-            progressBar=Utility.getProgressBar(this);
-            progressBar.show();
-            if (isCategory){
-                new ApiHelper(this).execute("getCategory");
-            }else {
-                new ApiHelper(this).execute("getSubCategory",String.valueOf(categoryId));
-            }
+            new ApiHelper(getApplicationContext()).execute(DBUtility.CategoryTableName);
+            new ApiHelper(getApplicationContext()).execute(DBUtility.SubCategoryTableName);
+            new ApiHelper(getApplicationContext()).execute(DBUtility.QuestionTableName);
 
-        }
-        else {
-            Utility.popUpWindow(this,this,"Check your internet",true);
         }
     }
     private void getItemFromDatabase(boolean isCategory,int categoryId){
-        DbHelper dbHelper = new DbHelper(this);
+
         progressBar=Utility.getProgressBar(this);
         progressBar.show();
         if (isCategory){
-            ArrayList<Category> categories=dbHelper.getAllCategory();
+            ArrayList<Category> categories=DbHelper.getInstance(getApplicationContext()).getAllCategory();
             list.clear();
             for (Category category:categories) {
                 HashMap<String, String> temp = new HashMap<String, String>();
@@ -70,7 +64,7 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
                 list.add(temp);
             }
         }else {
-            ArrayList<SubCategory> subCategories=dbHelper.getSubCategory(categoryId);
+            ArrayList<SubCategory> subCategories=DbHelper.getInstance(getApplicationContext()).getSubCategory(categoryId);
             list.clear();
             for (SubCategory subCategory:subCategories) {
                 HashMap<String, String> temp = new HashMap<String, String>();
@@ -137,7 +131,7 @@ public class MainActivity extends ListActivity implements MyInterface.OnTaskComp
 
     @Override
     public void onRetry() {
-        requestToApi(true,0);
+        requestToApi();
     }
     @Override
     public void onBackPressed() {
