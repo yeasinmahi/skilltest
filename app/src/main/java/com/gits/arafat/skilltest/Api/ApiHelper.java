@@ -56,19 +56,19 @@ public class ApiHelper extends AsyncTask {
         }
         else {
             switch (tableName){
-                case "getCategory":
+                case "category":
                     ArrayList<Category> categories = JsonParser.getCategories(result);
                     if (categories.size()>0){
                         DbHelper.getInstance(context).insertCategory(categories);
                     }
                     break;
-                case "getSubCategory":
+                case "subcategory":
                     ArrayList<SubCategory> subCategories = JsonParser.getSubCategories(result);
                     if (subCategories.size()>0){
                         DbHelper.getInstance(context).insertSubCategory(subCategories);
                     }
                     break;
-                case "getQuestion":
+                case "question":
                     ArrayList<Question> questions = JsonParser.getQuestions(result);
                     if (questions.size()>0){
                         DbHelper.getInstance(context).insertQuestion(questions);
