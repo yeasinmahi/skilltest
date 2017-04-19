@@ -17,8 +17,6 @@
             </intent-filter>
         </activity>
         <activity android:name="com.gits.arafat.skilltest.Activity.QuestionActivity"></activity>
-        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-        <uses-permission android:name="android.permission.INTERNET" />
         <receiver
             android:name=".NetworkManager.NetworkStateReceiver"
             android:label="NetworkChangeReceiver" >
