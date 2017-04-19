@@ -1,21 +1,21 @@
 <?php
 function getCategory($id){
     require 'dbConnector.php';
-    $sql = "SELECT * FROM `categoryId` where id>".$id;
+    $sql = "SELECT * FROM `category` where id>".$id;
     $result = $conn->query($sql);
     $conn->close();
     return $result;
 }
-function getSubCategory($categoryId,$id){
+function getSubCategory($id){
     require 'dbConnector.php';
-    $sql = "SELECT * FROM `subCategory` where categoryId =".$categoryId." and id>".$id;
+    $sql = "SELECT * FROM `subcategory` where id>".$id;
     $result = $conn->query($sql);
     $conn->close();
     return $result;
 }
-function getQuestion($categoryId,$subCategoryId){
+function getQuestion($id){
     require 'dbConnector.php';
-    $sql = "SELECT * FROM `question` where categoryId=".$categoryId." and subCategoryId=".$subCategoryId." and id>".$id;
+    $sql = "SELECT * FROM `question` where id>".$id;
     $result = $conn->query($sql);
     $conn->close();
     return $result;

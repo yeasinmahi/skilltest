@@ -9,6 +9,7 @@ import com.gits.arafat.skilltest.Database.DbHelper;
 import com.gits.arafat.skilltest.Model.Category;
 import com.gits.arafat.skilltest.Model.Question;
 import com.gits.arafat.skilltest.Model.SubCategory;
+import com.gits.arafat.skilltest.NetworkManager.NetworkUtil;
 import com.gits.arafat.skilltest.Others.Utility;
 
 import java.util.ArrayList;
@@ -30,13 +31,13 @@ public class ApiHelper extends AsyncTask {
             tableName = (String)params[0];
             switch (tableName){
                 case "category":
-                    link = Utility.link+"?tableName="+ tableName +"&&id="+ DbHelper.getInstance(context).getLastId(DBUtility.CategoryTableName);
+                    link = NetworkUtil.link+"?tableName="+ tableName +"&&id="+ DbHelper.getInstance(context).getLastId(DBUtility.CategoryTableName);
                     break;
                 case "subcategory":
-                    link = Utility.link+"?tableName="+ tableName +"&&id="+ DbHelper.getInstance(context).getLastId(DBUtility.SubCategoryTableName);
+                    link = NetworkUtil.link+"?tableName="+ tableName +"&&id="+ DbHelper.getInstance(context).getLastId(DBUtility.SubCategoryTableName);
                     break;
                 case "question":
-                    link = Utility.link+"?tableName="+ tableName +"&&id="+ DbHelper.getInstance(context).getLastId(DBUtility.QuestionTableName);
+                    link = NetworkUtil.link+"?tableName="+ tableName +"&&id="+ DbHelper.getInstance(context).getLastId(DBUtility.QuestionTableName);
                     break;
             }
             return Utility.getResponseFromUrl(link);

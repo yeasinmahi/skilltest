@@ -1,9 +1,9 @@
 <?php
 
-// $servername = "103.203.95.42:3306";
-// $username = "angan";
-// $password = "1234";
-// $dbname = "angandb";
+//$servername = "localhost";
+//$username = "gitsbd_yeasinmahi";
+//$password = "arafat7218";
+//$dbname = "gitsbd_iqTest1";
 
 $servername = "192.168.1.4";
 $username = "yeasinmahi";

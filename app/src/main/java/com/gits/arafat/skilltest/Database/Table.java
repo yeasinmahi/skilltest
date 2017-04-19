@@ -58,8 +58,8 @@ public class Table {
     }
     private void insertIntoCategory(){
         String sql="INSERT INTO `category` (`id`, `category`, `hasSubcategory`) VALUES\n" +
-                "(1, 'General Knowledge', 0),\n" +
-                "(2, 'IQ', 0),\n" +
+                "(1, 'IQ', 0),\n" +
+                "(2, 'General Knowledge', 0),\n" +
                 "(3, 'English', 0),\n" +
                 "(4, 'Programming Skils', 0),\n" +
                 "(5, 'BCS', 1);";

@@ -9,7 +9,8 @@ import android.net.NetworkInfo;
  */
 
 public class NetworkUtil {
-
+    public static String link="http://gits-bd.com/WebService/SkillTest3/apiParser.php";
+    //public static String link = "http://192.168.1.4:8080/SkillTest/apiParser.php";
     public static boolean isConnectingToInternet(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {

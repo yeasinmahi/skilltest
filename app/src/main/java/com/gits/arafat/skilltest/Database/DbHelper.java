@@ -132,7 +132,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		for (SubCategory subCategory:subCategories) {
 			ContentValues contentValues = new ContentValues();
 			contentValues.put("id", subCategory.getId());
-			contentValues.put("subCategory", String.valueOf(subCategory.getSubCategoryName()));
+			contentValues.put("subCategoryName", String.valueOf(subCategory.getSubCategoryName()));
 			contentValues.put("categoryId", subCategory.getCategoryId());
 			row = db.insert(DBUtility.SubCategoryTableName,null,contentValues);
 			if (row<=0){
@@ -155,6 +155,7 @@ public class DbHelper extends SQLiteOpenHelper {
 			contentValues.put("optionB", String.valueOf(question.getOptionB()));
 			contentValues.put("optionC", String.valueOf(question.getOptionC()));
 			contentValues.put("optionD", String.valueOf(question.getOptionD()));
+			contentValues.put("correctAns", String.valueOf(question.getCorrectAns()));
 			contentValues.put("categoryId", String.valueOf(question.getCategoryId()));
 			contentValues.put("subCategoryId", String.valueOf(question.getSubCategoryId()));
 			row = db.insert(DBUtility.QuestionTableName,null,contentValues);

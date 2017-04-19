@@ -45,8 +45,7 @@ import java.util.Random;
  */
 
 public class Utility {
-    //public static String link="http://gits-bd.com/WebService/SkillTest/apiParser.php";
-    public static String link = "http://192.168.1.4:8080/SkillTest/apiParser.php";
+
     public static int QuestionToBeAnswered = 10;
 
 
